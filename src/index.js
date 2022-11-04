@@ -18,6 +18,21 @@ app.listen(PORT, () => {
 });
 
 app.get('/talker', async (req, res) => {
-  const talker = await talkerManager.getAllData();
-  return res.status(200).json(talker);
+  try {
+    const talker = await talkerManager.getAllData();
+    return res.status(200).json(talker);
+  } catch (error) {
+    return res.status(500).json({ message: 'Ocorreu um erro!' });
+  }
+});
+
+app.get('/talker/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const talker = await talkerManager.getDataId(Number(id));
+    if (talker.length > 0) return res.status(200).json(talker[0]);
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Ocorreu um erro!' });
+  }
 });

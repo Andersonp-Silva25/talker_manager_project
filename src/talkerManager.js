@@ -17,4 +17,9 @@ const getAllData = async () => {
   return talkerManager;
 };
 
-module.exports = { getAllData };
+const getDataId = async (id) => {
+  const talkerManager = await readTalkerManager();
+  return talkerManager.filter((talker) => talker.id === id);
+};
+
+module.exports = { getAllData, getDataId };
