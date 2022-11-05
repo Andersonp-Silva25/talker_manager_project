@@ -12,6 +12,15 @@ const readTalkerManager = async () => {
   }
 };
 
+const writeTalkerManager = async (talkerManager) => {
+  try {
+    const file = await fs.writeFile(join(__dirname, path), JSON.stringify(talkerManager));
+    return file;
+  } catch (error) {
+    return null;
+  }
+};
+
 const getAllData = async () => {
   const talkerManager = await readTalkerManager();
   return talkerManager;
@@ -22,4 +31,17 @@ const getDataId = async (id) => {
   return talkerManager.filter((talker) => talker.id === id);
 };
 
-module.exports = { getAllData, getDataId };
+const createTalkerManager = async (talkerRequest) => {
+  const talkerManager = await readTalkerManager();
+  const newTalker = {
+    id: talkerManager.length + 1,
+    ...talkerRequest,
+  };
+
+  talkerManager.push(newTalker);
+  await writeTalkerManager(talkerManager);
+
+  return newTalker;
+};
+
+module.exports = { getAllData, getDataId, createTalkerManager };

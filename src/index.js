@@ -1,7 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const talkerManager = require('./talkerManager');
-const { validateEmail, validatePassword, encrypt } = require('./util');
+const { 
+  validateEmail, 
+  validatePassword, 
+  encrypt, 
+  validateToken, 
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+} = require('./util');
 
 const app = express();
 app.use(bodyParser.json());
@@ -45,4 +55,17 @@ app.post('/login', validateEmail, validatePassword, async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: 'Ocorreu um erro!' });
   }
+});
+
+app.post('/talker', 
+          validateToken, 
+          validateName, 
+          validateAge, 
+          validateTalk, 
+          validateWatchedAt, 
+          validateRate,
+async (req, res) => {
+  const newObj = req.body;
+  const newTalker = await talkerManager.createTalkerManager(newObj);
+  return res.status(201).send(newTalker);
 });
