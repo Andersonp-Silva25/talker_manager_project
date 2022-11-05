@@ -38,17 +38,10 @@ app.get('/talker/:id', async (req, res) => {
   }
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', validateEmail, validatePassword, async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const isEmail = validateEmail(email);
-    const isPassword = validatePassword(password);
-    const checkLogin = isEmail && isPassword;
-
-    if (checkLogin) {
-      const token = encrypt();
-      return res.status(200).json({ token });
-    }
+    const token = encrypt();
+    return res.status(200).json({ token });
   } catch (error) {
     return res.status(500).json({ message: 'Ocorreu um erro!' });
   }
