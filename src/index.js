@@ -11,6 +11,7 @@ const {
   validateTalk,
   validateWatchedAt,
   validateRate,
+  ERROR,
 } = require('./util');
 
 const app = express();
@@ -33,7 +34,7 @@ app.get('/talker', async (req, res) => {
     const talker = await talkerManager.getAllData();
     return res.status(200).json(talker);
   } catch (error) {
-    return res.status(500).json({ message: 'Ocorreu um erro!' });
+    return res.status(500).json(ERROR);
   }
 });
 
@@ -44,7 +45,7 @@ app.get('/talker/:id', async (req, res) => {
     if (talker.length > 0) return res.status(200).json(talker[0]);
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   } catch (error) {
-    return res.status(500).json({ message: 'Ocorreu um erro!' });
+    return res.status(500).json(ERROR);
   }
 });
 
@@ -53,7 +54,7 @@ app.post('/login', validateEmail, validatePassword, async (req, res) => {
     const token = encrypt();
     return res.status(200).json({ token });
   } catch (error) {
-    return res.status(500).json({ message: 'Ocorreu um erro!' });
+    return res.status(500).json(ERROR);
   }
 });
 
@@ -86,6 +87,17 @@ async (req, res) => {
 
     return res.status(200).json(updateTalker);
   } catch (error) {
-    return res.status(500).json({ message: 'Ocorreu um erro!' });
+    return res.status(500).json(ERROR);
+  }
+});
+
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const deleteTalker = await talkerManager.deleteTalkerManager(id);
+    return res.status(204).json(deleteTalker);
+  } catch (error) {
+    return res.status(500).json(ERROR);
   }
 });

@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { join, resolve } = require('path');
+const { join } = require('path');
 
 const path = './talker.json';
 
@@ -15,15 +15,6 @@ const readTalkerManager = async () => {
 const writeTalkerManager = async (talkerManager) => {
   try {
     const file = await fs.writeFile(join(__dirname, path), JSON.stringify(talkerManager));
-    return file;
-  } catch (error) {
-    return null;
-  }
-};
-
-const alterTalkerManager = async (talkerManager) => {
-  try {
-    const file = await fs.writeFile(resolve(__dirname, path), JSON.stringify(talkerManager));
     return file;
   } catch (error) {
     return null;
@@ -67,9 +58,22 @@ const updateTalkerManager = async (id, newObj) => {
     }
   }
 
-  await alterTalkerManager(alteredActivity);
+  await writeTalkerManager(alteredActivity);
 
   return newObjWithID;
 };
 
-module.exports = { getAllData, getDataId, createTalkerManager, updateTalkerManager };
+const deleteTalkerManager = async (id) => {
+  const allTalkers = await readTalkerManager();
+  const newTalkers = allTalkers.filter((talker) => talker.id !== Number(id));
+  
+  await writeTalkerManager(newTalkers);
+};
+
+module.exports = { 
+  getAllData, 
+  getDataId, 
+  createTalkerManager, 
+  updateTalkerManager, 
+  deleteTalkerManager, 
+};

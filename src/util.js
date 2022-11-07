@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 
 const statusCode = 400;
+const ERROR = { message: 'Ocorreu um erro!' };
 
 const encrypt = () => crypto.randomBytes(8).toString('hex');
 
@@ -108,4 +109,5 @@ module.exports = {
   validateTalk,
   validateWatchedAt,
   validateRate,
+  ERROR,
  };
