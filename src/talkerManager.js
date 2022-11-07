@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { join } = require('path');
+const { join, resolve } = require('path');
 
 const path = './talker.json';
 
@@ -15,6 +15,15 @@ const readTalkerManager = async () => {
 const writeTalkerManager = async (talkerManager) => {
   try {
     const file = await fs.writeFile(join(__dirname, path), JSON.stringify(talkerManager));
+    return file;
+  } catch (error) {
+    return null;
+  }
+};
+
+const alterTalkerManager = async (talkerManager) => {
+  try {
+    const file = await fs.writeFile(resolve(__dirname, path), JSON.stringify(talkerManager));
     return file;
   } catch (error) {
     return null;
@@ -44,4 +53,23 @@ const createTalkerManager = async (talkerRequest) => {
   return newTalker;
 };
 
-module.exports = { getAllData, getDataId, createTalkerManager };
+const updateTalkerManager = async (id, newObj) => {
+  const allTalkers = await readTalkerManager();
+  const newObjWithID = { id: Number(id), ...newObj };
+  const alteredActivity = [];
+
+  for (let i = 0; i < allTalkers.length; i += 1) {
+    const activity = allTalkers[i];
+    if (activity.id === Number(id)) {
+      alteredActivity.push(newObjWithID);
+    } else {
+      alteredActivity.push(activity);
+    }
+  }
+
+  await alterTalkerManager(alteredActivity);
+
+  return newObjWithID;
+};
+
+module.exports = { getAllData, getDataId, createTalkerManager, updateTalkerManager };

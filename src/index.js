@@ -69,3 +69,23 @@ async (req, res) => {
   const newTalker = await talkerManager.createTalkerManager(newObj);
   return res.status(201).send(newTalker);
 });
+
+app.put('/talker/:id', 
+        validateToken, 
+        validateName, 
+        validateAge, 
+        validateTalk, 
+        validateWatchedAt, 
+        validateRate,
+async (req, res) => {
+  try {
+    const { id } = req.params;
+    const newObj = req.body;
+
+    const updateTalker = await talkerManager.updateTalkerManager(id, newObj);
+
+    return res.status(200).json(updateTalker);
+  } catch (error) {
+    return res.status(500).json({ message: 'Ocorreu um erro!' });
+  }
+});
