@@ -31,6 +31,12 @@ const getDataId = async (id) => {
   return talkerManager.filter((talker) => talker.id === id);
 };
 
+const getSearchData = async (search) => {
+  const talkerManager = await readTalkerManager();
+  const filterTalker = talkerManager.filter(({ name }) => name.toLowerCase().includes(search));
+  return filterTalker;
+};
+
 const createTalkerManager = async (talkerRequest) => {
   const talkerManager = await readTalkerManager();
   const newTalker = {
@@ -76,4 +82,5 @@ module.exports = {
   createTalkerManager, 
   updateTalkerManager, 
   deleteTalkerManager, 
+  getSearchData,
 };

@@ -26,7 +26,17 @@ app.get('/', (_request, response) => {
 });
 
 app.listen(PORT, () => {
-  console.log('Onlineee');
+  console.log('Online');
+});
+
+app.get('/talker/search', validateToken, async (req, res) => {
+  try {
+    const { q } = req.query;
+    const search = await talkerManager.getSearchData(q.toLowerCase());
+    return res.status(200).json(search);
+  } catch (error) {
+    return res.status(500).json(ERROR);
+  }
 });
 
 app.get('/talker', async (req, res) => {
